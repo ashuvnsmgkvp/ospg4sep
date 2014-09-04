@@ -1,3 +1,3 @@
-CI Project ashu
+CI Project
 ==========================
 
