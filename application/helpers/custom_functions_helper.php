@@ -161,29 +161,37 @@ if (!function_exists('get_inventory_item')) {
 
 if (!function_exists('upload_document')) {
 function upload_document($filename){
+ 
     $CI = & get_instance();
 //$CI->load->helper('date');
-$time = time();
-$name = $_FILES[$filename]["name"];
- $ext = end(explode(".", $name));
+    $time = time();
+    $arr_name= explode(".", $_FILES[$filename]["name"]);
+    $name = $arr_name[0];
+    $ext = $arr_name[1];
+
         $config['upload_path'] = './assets/img/house/documents';
         //$config['allowed_types'] = 'gif|jpg|png';
         $config['allowed_types'] = '*';
-        $config['file_name'] = $filename.'_image_' . $time . '.' . $ext;
-        $config['max_size'] = '2048';
-        $config['max_width']  = '2048';
-        $config['max_height']  = '2048';
+        $config['file_name'] = $time .'_image_' .$name.  '.' . $ext;
+        $config['max_size'] = '10240';
+        $config['max_width']  = '0';
+        $config['max_height']  = '0';
         $config['quality'] = '100%';
         $CI->load->library('upload');
         $CI->load->library('image_lib');
         $CI->upload->initialize($config);
 
         if (!$CI->upload->do_upload($filename)){
-            echo $CI->upload->display_errors();
+                $file_upload['status']=0;
+               echo $file_upload['file_msg']= $CI->upload->display_errors();
+                $file_upload['name'] ="";
+            
         }else{
-                $filename = resize_upload_document($filename, $config['file_name']);
+                $file_upload['status']=1;
+                $file_upload['file_msg']="uploaded";
+                $file_upload['name'] = resize_upload_document($filename, $config['file_name']);
              }
-        return $filename ; 
+        return $file_upload ; 
 	}
 
 }

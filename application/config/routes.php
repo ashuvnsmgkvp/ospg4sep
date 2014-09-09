@@ -60,20 +60,24 @@ $route['admin/houses/addhouse'] = 'admin_houses/addhouse';
 $route['admin/houses/updatehouse'] = 'admin_houses/updatehouse';
 $route['admin/houses/updatehouse/(:any)'] = 'admin_houses/updatehouse/$1';
 $route['admin/houses/deletehouse/(:any)'] = 'admin_houses/deletehouse/$1';
-//$route['admin/houses/(:any)'] = 'admin_houses/index/$1'; //$1 = page number
+
 
 $route['admin/houses/addrent'] = 'admin_houses/addrent';
 $route['admin/houses/showrent'] = 'admin_houses/showrent';
 $route['admin/houses/updaterent'] = 'admin_houses/updaterent';
 $route['admin/houses/updaterent/(:any)'] = 'admin_houses/updaterent/$1';
 $route['admin/houses/deleterent/(:any)'] = 'admin_houses/deleterent/$1';
+$route['admin/houses/showrent/(:any)'] = 'admin_houses/showrent/$1'; //$1 = page number
 
 
+$route['admin/houses/showdoc/(:any)'] = 'admin_houses/showdoc/$1';
 $route['admin/houses/addroom'] = 'admin_houses/addroom';
 $route['admin/houses/showroom'] = 'admin_houses/showroom';
 $route['admin/houses/updateroom'] = 'admin_houses/updateroom';
 $route['admin/houses/updateroom/(:any)'] = 'admin_houses/updateroom/$1';
 $route['admin/houses/deleteroom/(:any)'] = 'admin_houses/deleteroom/$1';
+$route['admin/houses/showroom/(:any)'] = 'admin_houses/showroom/$1';
+$route['admin/houses/(:any)'] = 'admin_houses/index/$1';
 //
 //showroom
 //
@@ -84,6 +88,11 @@ $route['admin/guests/getsharetypebyhouseid'] = 'admin_guests/getsharetypebyhouse
 $route['admin/guests/getroomnobyhouseidandsharetype'] = 'admin_guests/getroomnobyhouseidandsharetype';
 $route['admin/guests/updateguest/(:any)'] = 'admin_guests/updateguest/$1';
 $route['admin/guests/deleteguest/(:any)'] = 'admin_guests/deleteguest/$1';
+
+$route['admin/guests/addguestmeter'] = 'admin_guests/addguestmeter';
+$route['admin/guests/showguestmeter'] = 'admin_guests/showguestmeter';
+$route['admin/guests/updateguestmeter/(:any)'] = 'admin_guests/updateguestmeter/$1';
+$route['admin/guests/deleteguestmeter/(:any)'] = 'admin_guests/deleteguestmeter/$1';
 
 $route['admin/guests/addguestrent'] = 'admin_guests/addguestrent';
 
@@ -99,26 +108,32 @@ $route['admin/commons/updatebank'] = 'admin_commons/updatebank';
 $route['admin/commons/updatebank/(:any)'] = 'admin_commons/updatebank/$1';
 $route['admin/commons/deletebank/(:any)'] = 'admin_commons/deletebank/$1';
 $route['admin/commons/getbankdetailbyhouseid'] = 'admin_commons/getbankdetailbyhouseid';
+$route['admin/commons/showbank/(:any)'] = 'admin_commons/showbank/$1';
 
-
+$route['admin/commons/addemp'] = 'admin_commons/addemp';
+$route['admin/commons/showemp'] = 'admin_commons/showemp';
+$route['admin/commons/updateemp'] = 'admin_commons/updateemp';
+$route['admin/commons/updateemp/(:any)'] = 'admin_commons/updateemp/$1';
+$route['admin/commons/deleteemp/(:any)'] = 'admin_commons/deleteemp/$1';
+$route['admin/commons/showemp/(:any)'] = 'admin_commons/showemp/$1';
 //$route['admin/commons/delete/(:any)'] = 'admin_commons/delete/$1';
-
-$route['admin/expense'] = 'admin_expense/index';
-$route['admin/expense/addsalary'] = 'admin_expense/addsalary';
-$route['admin/expense/addsocietyexp'] = 'admin_expense/addsocietyexp';
-$route['admin/expense/addwaterexp'] = 'admin_expense/addwaterexp';
-$route['admin/expense/addroexp'] = 'admin_expense/addroexp';
-$route['admin/expense/addrefrigratorexp'] = 'admin_expense/addrefrigratorexp';
-$route['admin/expense/addwashingmachineexp'] = 'admin_expense/addwashingmachineexp';
-$route['admin/expense/addwatercoolerexp'] = 'admin_expense/addwatercoolerexp';
-$route['admin/expense/addacexp'] = 'admin_expense/addacexp';
-$route['admin/expense/addwatersoftnerexp'] = 'admin_expense/addwatersoftnerexp';
-$route['admin/expense/addchimneyexp'] = 'admin_expense/addchimneyexp';
-$route['admin/expense/addinvertorexp'] = 'admin_expense/addinvertorexp';
-$route['admin/expense/addbattoryexp'] = 'admin_expense/addbattoryexp';
-$route['admin/expense/addgyserexp'] = 'admin_expense/addgyserexp';
-$route['admin/expense/addvehicleinsuranceexp'] = 'admin_expense/addvehicleinsuranceexp';
-$route['admin/expense/addcctvexp'] = 'admin_expense/addcctvexp';
+//
+//$route['admin/expense'] = 'admin_expense/index';
+//$route['admin/expense/addsalary'] = 'admin_expense/addsalary';
+//$route['admin/expense/addsocietyexp'] = 'admin_expense/addsocietyexp';
+//$route['admin/expense/addwaterexp'] = 'admin_expense/addwaterexp';
+//$route['admin/expense/addroexp'] = 'admin_expense/addroexp';
+//$route['admin/expense/addrefrigratorexp'] = 'admin_expense/addrefrigratorexp';
+//$route['admin/expense/addwashingmachineexp'] = 'admin_expense/addwashingmachineexp';
+//$route['admin/expense/addwatercoolerexp'] = 'admin_expense/addwatercoolerexp';
+//$route['admin/expense/addacexp'] = 'admin_expense/addacexp';
+//$route['admin/expense/addwatersoftnerexp'] = 'admin_expense/addwatersoftnerexp';
+//$route['admin/expense/addchimneyexp'] = 'admin_expense/addchimneyexp';
+//$route['admin/expense/addinvertorexp'] = 'admin_expense/addinvertorexp';
+//$route['admin/expense/addbattoryexp'] = 'admin_expense/addbattoryexp';
+//$route['admin/expense/addgyserexp'] = 'admin_expense/addgyserexp';
+//$route['admin/expense/addvehicleinsuranceexp'] = 'admin_expense/addvehicleinsuranceexp';
+//$route['admin/expense/addcctvexp'] = 'admin_expense/addcctvexp';
 
 $route['admin/expense/addmonthlyexp'] = 'admin_expense/addmonthlyexp';
 $route['admin/expense/showmonthlyexp'] = 'admin_expense/showmonthlyexp';
@@ -131,6 +146,7 @@ $route['admin/expense/showdailyexp'] = 'admin_expense/showdailyexp';
 $route['admin/expense/updatedailyexp'] = 'admin_expense/updatedailyexp';
 $route['admin/expense/updatedailyexp/(:any)'] = 'admin_expense/updatedailyexp/$1';
 $route['admin/expense/deletedailyexp/(:any)'] = 'admin_expense/deletedailyexp/$1';
+$route['admin/expense/getexpensetypebyhead'] = 'admin_expense/getexpensetypebyhead';
 
 $route['admin/expense/addinventory'] = 'admin_expense/addinventory';
 $route['admin/expense/showinventory'] = 'admin_expense/showinventory';
@@ -150,6 +166,13 @@ $route['admin/expense/showsalary'] = 'admin_expense/showsalary';
 $route['admin/expense/updatesalary'] = 'admin_expense/updatesalary';
 $route['admin/expense/updatesalary/(:any)'] = 'admin_expense/updatesalary/$1';
 $route['admin/expense/deletesalary/(:any)'] = 'admin_expense/deletesalary/$1';
+$route['admin/expense/showsalary/(:any)'] = 'admin_expense/showsalary/$1';
+
+$route['admin/expense/addemployee'] = 'admin_expense/addemployee';
+$route['admin/expense/showemployee'] = 'admin_expense/showemployee';
+$route['admin/expense/updateemployee'] = 'admin_expense/updateemployee';
+$route['admin/expense/updateemployee/(:any)'] = 'admin_expense/updateemployee/$1';
+$route['admin/expense/deleteemployee/(:any)'] = 'admin_expense/deleteemployee/$1';
 
 $route['admin/expense/addmaintenanceexp'] = 'admin_expense/addmaintenanceexp';
 $route['admin/expense/addpurchaseyexp'] = 'admin_expense/addpurchaseyexp';

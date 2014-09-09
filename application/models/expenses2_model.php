@@ -235,7 +235,26 @@ class Expenses2_model extends CI_Model {
         $this->db->where('dexp_id', $id);
         $this->db->delete('daily_expense');
     }
-
+function get_expense_type_byhead($exp_head='')
+{
+     $CI = & get_instance();
+                $CI->db->select('*');
+                $CI->db->from('expense_type');
+                $CI->db->where("exp_type", $exp_head);
+                $query = $CI->db->get();
+//echo $CI->db->last_query();
+                if ($query->num_rows() > 0) {
+                    $type = array();
+                    $type['0']='--Select--';
+                    foreach ($query->result('array') as $key => $row) {//$row['col1']
+                        $type[$row['type_id']] = $row['type_name'];
+                    }
+                    //print_r($type);
+                    return $type;
+                }
+                else
+                    return NULL;
+}
     // </editor-fold>  
 
    // <editor-fold defaultstate="collapsed" desc="/*************annual Expense*************/">
@@ -302,7 +321,7 @@ class Expenses2_model extends CI_Model {
 
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="/*************Inventory*************/">
+   // <editor-fold defaultstate="collapsed" desc="/*************Inventory*************/">
     function count_inventory($search_string = null) {
         $this->db->select('*');
         $this->db->from('inventory');
@@ -365,6 +384,7 @@ class Expenses2_model extends CI_Model {
     }
 
     // </editor-fold>
+   
    // <editor-fold defaultstate="collapsed" desc="/*************Salary*************/">
     function count_salaries($search_string = null) {
         $this->db->select('*');
@@ -377,7 +397,7 @@ class Expenses2_model extends CI_Model {
         $query = $this->db->get();
         return $query->num_rows();
     }
-    public function get_salaries($search_string = null) {
+    public function get_salaries($search_string = null, $limit_start, $limit_end) {
 
         $this->db->select('*');
         $this->db->from('salary_details');
@@ -386,7 +406,7 @@ class Expenses2_model extends CI_Model {
         if ($search_string) {
             $this->db->like('employee_name', $search_string);
         }
-
+         $this->db->limit($limit_start, $limit_end);
         $query = $this->db->get();
         //echo "<br><br><br><br><br>".$this->db->last_query();
         return $query->result_array();
@@ -420,6 +440,66 @@ function update_salary($id, $data)
         function delete_salary($id) {
         $this->db->where('salary_id', $id);
         $this->db->delete('salary_details');
+       // echo $this->db->last_query();
+    }
+
+    // </editor-fold>
+    
+   // <editor-fold defaultstate="collapsed" desc="/*************Employee*************/">
+    function count_employee($search_string = null) {
+        $this->db->select('*');
+        $this->db->from('employee');
+
+        if ($search_string) {
+            $this->db->like('employee_name', $search_string);
+        }
+
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+    public function get_employee($search_string = null) {
+
+        $this->db->select('*');
+        $this->db->from('employee');
+        $this->db->join('house', 'house.house_id = employee.house_id', 'left');
+
+        if ($search_string) {
+            $this->db->like('employee_name', $search_string);
+        }
+
+        $query = $this->db->get();
+        //echo "<br><br><br><br><br>".$this->db->last_query();
+        return $query->result_array();
+    }
+ public function get_employee_by_id($id)
+    {
+		$this->db->select('*');
+		$this->db->from('employee');
+		$this->db->where('emp_id', $id);
+		$query = $this->db->get();
+               // echo $this->db->last_query();
+		return $query->result_array(); 
+    }
+    function addemployee($data) {
+        $insert = $this->db->insert('employee', $data);
+        return $insert;
+    }
+function update_employee($id, $data)
+    {
+		$this->db->where('emp_id', $id);
+		$this->db->update('employee', $data);
+		$report = array();
+		$report['error'] = $this->db->_error_number();
+		$report['message'] = $this->db->_error_message();
+		if($report !== 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+        function delete_employee($id) {
+        $this->db->where('emp_id', $id);
+        $this->db->delete('employee');
        // echo $this->db->last_query();
     }
 

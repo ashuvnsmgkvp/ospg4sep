@@ -22,13 +22,11 @@ class Admin_commons extends CI_Controller {
     public function index() {
 
         //all the posts sent by the view
-        $manufacture_id = $this->input->post('manufacture_id');
+        
         $search_string = $this->input->post('search_string');
-        $order = $this->input->post('order');
-        $order_type = $this->input->post('order_type');
-
+        
         //pagination settings
-        $config['per_page'] = 5;
+        $config['per_page'] = 2;
         $config['base_url'] = base_url() . 'admin/guests';
         $config['use_page_numbers'] = TRUE;
         $config['num_links'] = 20;
@@ -189,9 +187,10 @@ class Admin_commons extends CI_Controller {
     public function showbank() {
         $search_string = $this->input->post('search_string');
         //pagination settings
-        $config['per_page'] = 5;
-        $config['base_url'] = base_url() . 'admin/houses';
+        $config['per_page'] = 25;
+        $config['base_url'] = base_url() . 'admin/commons/showbank';
         $config['use_page_numbers'] = TRUE;
+        $config['uri_segment']=4;
         $config['num_links'] = 20;
         $config['full_tag_open'] = '<ul>';
         $config['full_tag_close'] = '</ul>';
@@ -200,13 +199,13 @@ class Admin_commons extends CI_Controller {
         $config['cur_tag_open'] = '<li class="active"><a>';
         $config['cur_tag_close'] = '</a></li>';
         //limit end
-        $page = $this->uri->segment(3);
+        $page = $this->uri->segment(4);
         //math to get the initial record to be select in the database
         $limit_end = ($page * $config['per_page']) - $config['per_page'];
         if ($limit_end < 0) {
             $limit_end = 0;
         }
-        if ($search_string !== false || $this->uri->segment(3) == true) {
+        if ($search_string !== '' || $this->uri->segment(4) == true) {
             if ($search_string) {
                 $filter_session_data['search_string_selected'] = $search_string;
             } else {
@@ -217,7 +216,6 @@ class Admin_commons extends CI_Controller {
             //save session data into the session
             $this->session->set_userdata(@$filter_session_data);
             //fetch manufacturers data into arrays
-            //$data['manufactures'] = $this->manufacturers_model->get_manufacturers();
             $data['count_banks'] = $this->commons_model->count_banks($search_string);
             $config['total_rows'] = $data['count_banks'];
             //fetch sql data into arrays
@@ -226,7 +224,7 @@ class Admin_commons extends CI_Controller {
             } else {
                 $data['banks'] = $this->commons_model->get_banks('', $config['per_page'], $limit_end);
             }
-            //echo "<pre>";print_r($data['banks']);echo "</pre>";
+            
         } else {
             $filter_session_data['search_string_selected'] = null;
             $this->session->set_userdata($filter_session_data);
@@ -234,9 +232,9 @@ class Admin_commons extends CI_Controller {
             $data['search_string_selected'] = '';
             $data['count_banks'] = $this->commons_model->count_banks();
             $data['banks'] = $this->commons_model->get_banks('', $config['per_page'], $limit_end);
-        }//!isset($manufacture_id) && !isset($search_string) && !isset($order)
+        }
         //initializate the panination helper 
-        //echo "<pre>";print_r( $data['banks']);echo "</pre>";
+        
         $this->pagination->initialize($config);
         $data['main_content'] = 'admin/commons/listbank';
         $this->load->view('includes/template', $data);
@@ -306,6 +304,163 @@ class Admin_commons extends CI_Controller {
         $data['main_content'] = 'admin/guests/addguestrent';
         $this->load->view('includes/template', $data);
     }
+
+// </editor-fold >
+    
+    // <editor-fold defaultstate="collapsed" desc="/*************Employee Details *************/">
+
+    public function addemp() {
+        //if save button was clicked, get the data sent via post
+        if ($this->input->server('REQUEST_METHOD') === 'POST') {
+
+            //form validation
+            $this->form_validation->set_rules('emp_name', 'emp_name', 'required');
+            $this->form_validation->set_rules('emp_doj', 'emp_doj', 'required');
+            
+            $this->form_validation->set_error_delimiters('<div class="alert alert-error"><a class="close" data-dismiss="alert">×</a><strong>', '</strong></div>');
+
+            //if the form has passed through the validation
+            if ($this->form_validation->run()) {
+                $data_to_emp = array(
+                   
+                    'emp_name' => $this->input->post('emp_name'),
+                    'emp_doj' => $this->input->post('emp_doj'),
+                    'emp_dol' => $this->input->post('emp_dol'),
+                    'added_date' => @date('Y-m-d'),
+                    'added_by' => 2,
+                    
+                );
+                //if the insert has returned true then we show the flash message
+                if ($this->commons_model->addemp($data_to_emp)) {
+                    $data['flash_message'] = TRUE;
+                } else {
+                    $data['flash_message'] = FALSE;
+                }
+                 redirect('admin/commons/showemp/');
+            }
+        }
+        //$data['houses'] = get_house_number();
+        $data['main_content'] = 'admin/commons/addemp';
+        $this->load->view('includes/template', $data);
+    }
+
+    public function showemp() {
+        $search_string = $this->input->post('search_string');
+        //pagination settings
+        $config['per_page'] = 25;
+        $config['base_url'] = base_url() . 'admin/commons/showemp';
+        $config['use_page_numbers'] = TRUE;
+        $config['uri_segment']=4;
+        $config['num_links'] = 20;
+        $config['full_tag_open'] = '<ul>';
+        $config['full_tag_close'] = '</ul>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $config['cur_tag_open'] = '<li class="active"><a>';
+        $config['cur_tag_close'] = '</a></li>';
+        //limit end
+        $page = $this->uri->segment(3);
+        //math to get the initial record to be select in the database
+        $limit_end = ($page * $config['per_page']) - $config['per_page'];
+        if ($limit_end < 0) {
+            $limit_end = 0;
+        }
+        if ($search_string !== '' || $this->uri->segment(3) == true) {
+            if ($search_string) {
+                $filter_session_data['search_string_selected'] = $search_string;
+            } else {
+                $search_string = $this->session->userdata('search_string_selected');
+            }
+            $data['search_string_selected'] = $search_string;
+
+            //save session data into the session
+            $this->session->set_userdata(@$filter_session_data);
+            //fetch manufacturers data into arrays
+            $data['count_emps'] = $this->commons_model->count_emps($search_string);
+            $config['total_rows'] = $data['count_emps'];
+            //fetch sql data into arrays
+            if ($search_string) {
+                $data['emps'] = $this->commons_model->get_emps($search_string, $config['per_page'], $limit_end);
+            } else {
+                $data['emps'] = $this->commons_model->get_emps('', $config['per_page'], $limit_end);
+            }
+            //echo "<pre>";print_r($data['emps']);echo "</pre>";
+        } else {
+            $filter_session_data['search_string_selected'] = null;
+            $this->session->set_userdata($filter_session_data);
+            //pre selected options
+            $data['search_string_selected'] = '';
+            $data['count_emps'] = $this->commons_model->count_emps();
+            $data['emps'] = $this->commons_model->get_emps('', $config['per_page'], $limit_end);
+        }//!isset($manufacture_id) && !isset($search_string) && !isset($order)
+        //initializate the panination helper 
+        //echo "<pre>";print_r( $data['emps']);echo "</pre>";
+        $this->pagination->initialize($config);
+        $data['main_content'] = 'admin/commons/listemp';
+        $this->load->view('includes/template', $data);
+    }
+
+    public function updateemp() {
+
+        $id = $this->uri->segment(4);
+        //if save button was clicked, get the data sent via post
+        if ($this->input->server('REQUEST_METHOD') === 'POST') {
+            //form validation
+            // echo "ashu";
+           //form validation
+            $this->form_validation->set_rules('emp_name', 'emp_name', 'required');
+            $this->form_validation->set_rules('emp_doj', 'emp_doj', 'required');
+            $this->form_validation->set_error_delimiters('<div class="alert alert-error"><a class="close" data-dismiss="alert">×</a><strong>', '</strong></div>');
+
+            //if the form has passed through the validation
+            if ($this->form_validation->run()) {
+               $data_to_emp = array(
+                   
+                    'emp_name' => $this->input->post('emp_name'),
+                    'emp_doj' => $this->input->post('emp_doj'),
+                    'emp_dol' => $this->input->post('emp_dol'),
+                    'added_date' => @date('Y-m-d'),
+                    'added_by' => 2,
+                    
+                );
+                // echo "ashu3";
+                if ($this->commons_model->update_emp($id, $data_to_emp) == TRUE) {
+                    $this->session->set_flashdata('flash_message', 'updated');
+                } else {
+                    $this->session->set_flashdata('flash_message', 'not_updated');
+                }
+
+                redirect('admin/commons/showemp/');
+            }//validation run
+        }
+
+        //product data 
+        $data['emp'] = $this->commons_model->get_emp_by_id($id);
+        $data['houses'] = get_house_number();
+        $data['main_content'] = 'admin/commons/editemp';
+        $this->load->view('includes/template', $data);
+    }
+
+    public function deleteemp() {
+        $id = $this->uri->segment(4);
+        $this->commons_model->delete_emp($id);
+        redirect('admin/commons/showemp');
+    }
+//   function getbankdetailbyhouseid() {
+//        $this->load->model('users_model');
+//        $house_id = $this->input->post('house_id');
+//        $data1= $this->commons_model->get_bank_by_house_id($house_id);
+//        $data['bank']=$data1[0];
+//       // print_r($data['bank']);
+//        if (count($data['bank']) > 0)
+//            $data['status'] = 1;
+//        else
+//            $data['status'] = 0;
+//
+//        echo json_encode($data);
+//    }
+
+
 
 // </editor-fold >
 }

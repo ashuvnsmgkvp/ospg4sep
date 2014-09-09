@@ -36,7 +36,7 @@ class Houses_model extends CI_Model {
 //			$this->db->where('manufacture_id', $manufacture_id);
 //		}
         if ($search_string) {
-            $this->db->like('house_address', $search_string);
+            $this->db->like('owner_name', $search_string);
         }
 
 //		$this->db->join('manufacturers', 'houses.manufacture_id = manufacturers.id', 'left');
@@ -63,7 +63,7 @@ class Houses_model extends CI_Model {
         $this->db->from('house');
 
         if ($search_string) {
-            $this->db->like('house_address', $search_string);
+            $this->db->like('owner_name', $search_string);
         }
 
         $query = $this->db->get();
@@ -110,48 +110,25 @@ class Houses_model extends CI_Model {
     public function get_rents($search_string = null, $limit_start, $limit_end) {
 
         $this->db->select('house_rent.*,house.house_no,house.house_address');
-//		$this->db->select('house.description');
-//		$this->db->select('house.stock');
-//		$this->db->select('house.cost_price');
-//		$this->db->select('house.sell_price');
-//		$this->db->select('house.manufacture_id');
-        //$this->db->select('manufacturers.name as manufacture_name');
+
         $this->db->from('house_rent');
-//		if($manufacture_id != null && $manufacture_id != 0){
-//			$this->db->where('manufacture_id', $manufacture_id);
-//		}
         if ($search_string) {
-            $this->db->like('account_holder', $search_string);
-            $this->db->or_like('house_address', $search_string);
+            $this->db->like('house_no', $search_string);
         }
-
         $this->db->join('house', 'house_rent.house_id = house.house_id', 'left');
-//
-//		$this->db->group_by('houses.id');
-//		if($order){
-//			$this->db->order_by($order, $order_type);
-//		}else{
-//		    $this->db->order_by('id', $order_type);
-//		}
-
-
         $this->db->limit($limit_start, $limit_end);
-        //$this->db->limit('4', '4');
-
-
         $query = $this->db->get();
-        //echo "<br><br><br>".$this->db->last_query();
         return $query->result_array();
     }
 
     function count_rents($search_string = null) {
         $this->db->select('*');
         $this->db->from('house_rent');
+        $this->db->join('house', 'house_rent.house_id = house.house_id', 'left');
 
         if ($search_string) {
-            $this->db->like('account_holder', $search_string);
+            $this->db->like('house_no', $search_string);
         }
-
         $query = $this->db->get();
         //ECHO $this->db->last_query();
         return $query->num_rows();
@@ -196,25 +173,27 @@ class Houses_model extends CI_Model {
 
         $this->db->select('*');
         $this->db->from('house_room');
-        if ($search_string) {
-            $this->db->like('account_holder', $search_string);
-            $this->db->or_like('house_address', $search_string);
-        }
         $this->db->join('house', 'house_room.house_id = house.house_id', 'left');
+        if ($search_string) {
+                        $this->db->like('house_no', $search_string);
+        }
+        
         $this->db->limit($limit_start, $limit_end);
         $query = $this->db->get();
         //echo "<br><br><br>".$this->db->last_query();
         return $query->result_array();
     }
 
-    function count_rooms($search_string = null) {
+    function    count_rooms($search_string = null) {
         $this->db->select('*');
         $this->db->from('house_room');
         if ($search_string) {
-            $this->db->like('account_holder', $search_string);
+                        $this->db->like('house_no', $search_string);
         }
+        $this->db->join('house', 'house_room.house_id = house.house_id', 'left');
         $query = $this->db->get();
-        //ECHO $this->db->last_query();
+        $this->db->last_query();
+       // echo $query->num_rows();
         return $query->num_rows();
     }
 

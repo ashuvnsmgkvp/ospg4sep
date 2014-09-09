@@ -155,9 +155,10 @@ class Admin_expense extends CI_Controller {
     public function showsalary(){
         $search_string = $this->input->post('search_string');
         //pagination settings
-        $config['per_page'] = 5;
-        $config['base_url'] = base_url() . 'admin/expense';
+        $config['per_page'] = 2;
+        $config['base_url'] = base_url() . 'admin/expense/showsalary';
         $config['use_page_numbers'] = TRUE;
+        $config['uri_segment']=4;
         $config['num_links'] = 20;
         $config['full_tag_open'] = '<ul>';
         $config['full_tag_close'] = '</ul>';
@@ -166,13 +167,14 @@ class Admin_expense extends CI_Controller {
         $config['cur_tag_open'] = '<li class="active"><a>';
         $config['cur_tag_close'] = '</a></li>';
         //limit end
-        $page = $this->uri->segment(3);
+        $page = $this->uri->segment(4);
         //math to get the initial record to be select in the database
         $limit_end = ($page * $config['per_page']) - $config['per_page'];
         if ($limit_end < 0) {
             $limit_end = 0;
         }
-        if ($search_string !== false || $this->uri->segment(3) == true) {
+        if ($search_string !== '' || $this->uri->segment(4) == true) {
+           
             if ($search_string) {
                 $filter_session_data['search_string_selected'] = $search_string;
             } else {
@@ -245,6 +247,7 @@ class Admin_expense extends CI_Controller {
                 } else {
                     $data['flash_message'] = FALSE;
                 }
+                redirect('admin/expense/showsalary/');
             }
         }
         $data['houses'] = get_house_number();
@@ -288,6 +291,7 @@ class Admin_expense extends CI_Controller {
                 } else {
                     $data['flash_message'] = FALSE;
                 }
+                redirect('admin/expense/showsalary/');
             }
         }
         $data['salery'] = $this->expenses2_model->get_salary_by_id($id);
@@ -456,8 +460,8 @@ class Admin_expense extends CI_Controller {
     public function showdailyexp() {
         $search_string = $this->input->post('search_string');
         //pagination settings
-        $config['per_page'] = 20;
-        $config['base_url'] = base_url() . 'admin/expense/showdailyexp';
+        $config['per_page'] = 5;
+        $config['base_url'] = base_url() . 'admin/expense';
         $config['use_page_numbers'] = TRUE;
         $config['num_links'] = 20;
         $config['full_tag_open'] = '<ul>';
@@ -596,7 +600,17 @@ class Admin_expense extends CI_Controller {
         $this->expenses2_model->delete_dexp($id);
         redirect('admin/expense/showdailyexp');
     }
-
+public function getexpensetypebyhead()
+{
+     $exp_head = $this->input->post('exp_head');
+        $share_types['lists'] = $this->expenses2_model->get_expense_type_byhead($exp_head);
+        //print_r($share_types['lists']);
+        if (count($share_types['lists']) > 0)
+            $share_types['status'] = 1;
+        else
+            $share_types['status'] = 0;
+        echo json_encode($share_types);
+}
     // </editor-fold>
    
      // <editor-fold defaultstate="collapsed" desc="/*************Annual Exp *************/">
@@ -854,6 +868,7 @@ class Admin_expense extends CI_Controller {
                     'inv_item' => $this->input->post('inv_item'),
                     'make' => $this->input->post('make'),
                     'model' => $this->input->post('model'),
+                    'capacity'=>$this->input->post('capacity'),
                     'purchase_date' => $this->input->post('purchase_date'),
                     'purchase_amount' => $this->input->post('purchase_amount'),
                     'vendor_name' => $this->input->post('vendor_name'),
@@ -900,6 +915,7 @@ class Admin_expense extends CI_Controller {
                     'inv_item' => $this->input->post('inv_item'),
                     'make' => $this->input->post('make'),
                     'model' => $this->input->post('model'),
+                    'capacity'=>$this->input->post('capacity'), 
                     'purchase_date' => $this->input->post('purchase_date'),
                     'purchase_amount' => $this->input->post('purchase_amount'),
                     'vendor_name' => $this->input->post('vendor_name'),
